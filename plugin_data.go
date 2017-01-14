@@ -8,7 +8,21 @@ type PluginError struct {
 
 // PluginInformation describes the information for the server.
 type PluginInformation struct {
-	Server PluginServer
+	Account PluginAccount
+	Server  PluginServer
+}
+
+type PluginAccount struct {
+	ID         int
+	Domain     string
+	Name       string
+	Currency   PluginCurrency
+	OnlineMode bool `json:"online_mode"`
+}
+
+type PluginCurrency struct {
+	ISO4217 string `json:"iso_4217"`
+	Symbol  string
 }
 
 type PluginServer struct {

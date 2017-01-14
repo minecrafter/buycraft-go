@@ -19,6 +19,14 @@ func TestInformation(t *testing.T) {
 		t.Errorf("Unable to get information: %s", err.Error())
 	}
 
+	if information.Account.ID != 459863 {
+		t.Errorf("Expected account ID %d, got %d", 459863, information.Account.ID)
+	}
+
+	if information.Account.Currency.ISO4217 != "USD" {
+		t.Errorf("Expected account currency ISO 4217 code %s, got %s", "USD", information.Account.Currency.ISO4217)
+	}
+
 	if information.Server.Name != "Buycraftxtestsuite" {
 		t.Errorf("Server name is unexpected; wanted 'Buycraftxtestsuite', got '%s'", information.Server.Name)
 	}
