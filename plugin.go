@@ -23,13 +23,7 @@ func NewPluginClient(secret string) *PluginClient {
 	}
 }
 
-func (pc *PluginClient) pluginGet(endpoint string, information interface{}) error {
-	req, err := http.NewRequest(http.MethodGet, apiEndpoint+endpoint, nil)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("X-Buycraft-Secret", pc.secret)
-	req.Header.Set("User-Agent", apiUserAgent)
+func (pc *PluginClient) basicPluginHandle(req *http.Request, information interface{}) error {
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
@@ -57,9 +51,19 @@ func (pc *PluginClient) pluginGet(endpoint string, information interface{}) erro
 	return fmt.Errorf("Buycraft plugin error %d: %s", pluginErr.Code, pluginErr.Message)
 }
 
+func (pc *PluginClient) basicPluginGet(endpoint string, information interface{}) error {
+	req, err := http.NewRequest(http.MethodGet, apiEndpoint+endpoint, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("X-Buycraft-Secret", pc.secret)
+	req.Header.Set("User-Agent", apiUserAgent)
+	return pc.basicPluginHandle(req, &information)
+}
+
 // Information returns information about the client.
 func (pc *PluginClient) Information() (PluginInformation, error) {
 	var pi PluginInformation
-	err := pc.pluginGet("/information", &pi)
+	err := pc.basicPluginGet("/information", &pi)
 	return pi, err
 }
